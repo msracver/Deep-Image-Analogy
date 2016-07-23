@@ -8,6 +8,7 @@ build_script:
     cp CommonSettings.props.example CommonSettings.props
     
     (New-Object Net.WebClient).DownloadFile('https://dist.nuget.org/win-x86-commandline/v2.8.6/nuget.exe', 'C:\Tools\NuGet\NuGet.exe')
+
     nuget restore Caffe.sln
 
     msbuild Caffe.sln /v:m /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /p:"Configuration=Debug;CpuOnlyBuild=true;UseCuDNN=false"
@@ -17,5 +18,7 @@ build_script:
     cd ..
    
     ls
+    
     ls -recurse Build
+    
     .\Build\Release\test_all.exe --gtest_filter=-*TestTimer*

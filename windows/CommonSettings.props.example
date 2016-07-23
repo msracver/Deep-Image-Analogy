@@ -37,8 +37,8 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <OutDir>$(BuildDir)\$(Platform)\$(Configuration)\</OutDir>
-        <IntDir>$(BuildDir)\Int\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+        <OutDir>$(BuildDir)\$(Configuration)\</OutDir>
+        <IntDir>$(BuildDir)\Int\$(ProjectName)\$(Configuration)\</IntDir>
     </PropertyGroup>
     <PropertyGroup>
         <LibraryPath>$(OutDir);$(CUDA_PATH)\lib\$(Platform);$(LibraryPath)</LibraryPath>

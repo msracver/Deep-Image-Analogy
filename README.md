@@ -8,7 +8,7 @@ This branch of Caffe extends [BVLC-led Caffe](https://github.com/BVLC/caffe) by 
 
 |  **`Linux (CPU)`**   |  **`Windows (CPU)`** |
 |-------------------|----------------------|
-| [![Travis Build Status](https://api.travis-ci.org/Microsoft/caffe.svg?branch=master)](https://travis-ci.org/Microsoft/caffe) | [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/58wvckt0rcqtwnr5/branch/master?svg=true)](https://ci.appveyor.com/project/pavlejosipovic/caffe-3a30a) |              
+| [![Travis Build Status](https://api.travis-ci.org/Microsoft/caffe.svg?branch=master)](https://travis-ci.org/Microsoft/caffe) | [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/6x4l911frv07lj1w/branch/master?svg=true)](https://ci.appveyor.com/project/zer0n/caffe) |              
 
 [![License](https://img.shields.io/badge/license-BSD-blue.svg)](LICENSE)
 

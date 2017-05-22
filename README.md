@@ -2,7 +2,7 @@
 
 # Deep Image Analogy
 
-The major contributors of this repository include [Jing Liao](https://liaojing.github.io/html/index.html), [Yuan Yao](http://yuanyao.info/), [Lu Yuan](http://www.lyuan.org/), [Gang Hua](http://www.ganghua.org/), [Sing Bing Kang](http://www.singbingkang.com/publications/) @ Microsoft Research.
+The major contributors of this repository include [Jing Liao](https://liaojing.github.io/html/index.html), [Yuan Yao](http://yuanyao.info/), [Lu Yuan](http://www.lyuan.org/), [Gang Hua](http://www.ganghua.org/) and [Sing Bing Kang](http://www.singbingkang.com/publications/) at Microsoft Research.
 
 ## Introduction
 
@@ -119,18 +119,18 @@ which means
 - **GPU Number**=```0```
 - **Ratio**=```0.5```
 - **Blend Weight**=```2```
-- **Flag of WLS Filter**=```false```(```1``` means ```true```)
+- **Flag of WLS Filter**=```0```( ```0```: WLS filter disabled, ```1```: WLS filter enabled, only required for the case of photo to photo)
 
 ### Tips
 
 - We often test images of size 600x400 and 448x448.
-- For the sizes above, we found ratio=0.5 can make the results better in face cases. For other complicated examples like mountain, ship and garden, we set ratio to 1.0.
+- We set ratio to 1.0 by default. Specifically, for face (portrait) cases, we find ratio = 0.5 often make the results better.
 - Blend weight controls the result appearance. If you want the result to be more like original content photo, please increase it; if you want the result more faithful to the style, please reduce it.
 - For the four applications, our settings are mostly (but not definitely):
-  - Photo2style: blend weight=3, ratio=0.5 for face and ratio=1 for other cases.
-  - Style2style: blend weight=3, ratio=1.
-  - Style2photo: blend weight=2, ratio=0.5.
-  - Photo2photo: blend weight=3, ratio=1.
+  - Photo to Style: blend weight=3, ratio=0.5 for face and ratio=1 for other cases.
+  - Style to Style: blend weight=3, ratio=1.
+  - Style to Photo: blend weight=2, ratio=0.5.
+  - Photo to Photo: blend weight=3, ratio=1.
 
 ## Acknowledgments
 

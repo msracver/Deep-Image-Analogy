@@ -44,7 +44,7 @@ If you find **Deep Image Analogy** (include deep patchmatch) helpful for your re
 
 One major application of our code is to transfer the style from a painting to a photo.
 <div>
-<img src="https://github.com/msracver/Deep-Image-Analogy/blob/master/windows/deep_image_analogy/example/readme/p2sface.gif"/>
+<img src="https://github.com/msracver/Deep-Image-Analogy/blob/master/windows/deep_image_analogy/example/readme/p2sface.gif" height = "300"/>
 </div>
 
 ### Style to Style

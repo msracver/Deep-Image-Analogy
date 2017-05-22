@@ -2,7 +2,7 @@
 
 # Deep Image Analogy
 
-The major contributors of this repository include Jing Liao and Yuan Yao.
+The major contributors of this repository include [Jing Liao](https://liaojing.github.io/html/index.html) and [Yuan Yao](http://yuanyao.info/).
 
 ## 1 Introduction
 
@@ -72,7 +72,6 @@ Our project is based on [Caffe](http://caffe.berkeleyvision.org/), so you need t
 
 You need to download models VGG-19 model before start to run a demo. Go to ```windows/deep_image_analogy/models/vgg19/``` folder and download:
 - http://www.robots.ox.ac.uk/~vgg/software/very_deep/caffe/VGG_ILSVRC_19_layers.caffemodel
-
 
 ### 3.4 Demo
 

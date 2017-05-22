@@ -101,12 +101,6 @@ void DeepAnalogy::SetOutputDir(string f_o){
 void DeepAnalogy::SetGPU(int no){
 	cudaSetDevice(no);
 }
-
-void DeepAnalogy::SetId(int no1, int no2){
-	na = no1;
-	nbp = no2;
-}
-
 void DeepAnalogy::LoadInputs(){
 	float ratio;
 	Mat ori_AL = imread(file_A);
@@ -305,7 +299,7 @@ void DeepAnalogy::ComputeAnn() {
 
 	params.iter = 10;
 	
-	//BAale and enhance
+	//scale and enhance
     float ratio = resizeRatio;
 	Mat img_BP, img_A;
 	cv::resize(img_AL, img_A, Size(), ratio, ratio, INTER_CUBIC);
@@ -596,14 +590,14 @@ void DeepAnalogy::ComputeAnn() {
 		result_AB = reconstruct_avg(img_AL, img_BPL, ann_host_AB, sizes[curr_layer]);
 
 		cv::resize(result_AB, out, Size(), (float)ori_A_cols / cur_A_cols, (float)ori_A_rows / cur_A_rows, INTER_CUBIC);
-		sprintf(fname, "resultAB_%d_%d.png", na, nbp);
+		sprintf(fname, "resultAB.png");
 		imwrite(path_output + fname, out);
 
 		flow = reconstruct_dflow(img_BPL, img_AL, ann_host_BA, sizes[curr_layer]);
 		result_BA = reconstruct_avg(img_BPL, img_AL, ann_host_BA, sizes[curr_layer]);
 
 		cv::resize(result_BA, out, Size(), (float)ori_BP_cols / cur_BP_cols, (float)ori_BP_rows / cur_BP_rows, INTER_CUBIC);
-		sprintf(fname, "resultBA_%d_%d.png", na, nbp);
+		sprintf(fname, "resultBA.png");
 		imwrite(path_output + fname, out);
 
 		if (photoTransfer)
@@ -624,12 +618,12 @@ void DeepAnalogy::ComputeAnn() {
 			refine_AB = origin_A + filtered_AB - filtered_A;
 			refine_BA = origin_B + filtered_BA - filtered_B;
 
-			sprintf(fname, "refineAB_%d_%d.png", na, nbp);
+			sprintf(fname, "refineAB.png");
 			refine_AB.convertTo(normal, CV_32FC3, 255.0);
 			cv::resize(normal, out, Size(), (float)ori_A_cols / cur_A_cols, (float)ori_A_rows / cur_A_rows, INTER_CUBIC);
 			imwrite(path_output + fname, out);
 
-			sprintf(fname, "refineBA_%d_%d.png", na, nbp);
+			sprintf(fname, "refineBA.png");
 			refine_BA.convertTo(normal, CV_32FC3, 255.0);
 			cv::resize(normal, out, Size(), (float)ori_BP_cols / cur_BP_cols, (float)ori_BP_rows / cur_BP_rows, INTER_CUBIC);
 			imwrite(path_output + fname, out);
@@ -644,7 +638,7 @@ void DeepAnalogy::ComputeAnn() {
 	{
 		ofstream output1;
 		char fname[256];
-		sprintf(fname, "flowAB_%d_%d.txt", na, nbp);
+		sprintf(fname, "flowAB.txt");
 		output1.open(path_output + fname);
 		for (int y = 0; y < img_AL.rows; y++)
 		for (int x = 0; x < img_AL.cols; x++)
@@ -657,7 +651,7 @@ void DeepAnalogy::ComputeAnn() {
 		output1.close();
 
 		ofstream output2;
-		sprintf(fname, "flowBA_%d_%d.txt", na, nbp);
+		sprintf(fname, "flowBA.txt");
 		output2.open(path_output + fname);
 		for (int y = 0; y < img_BPL.rows; y++){
 			for (int x = 0; x < img_BPL.cols; x++)

@@ -4,11 +4,13 @@ int main(int argc, char** argv) {
 
 	DeepAnalogy dp;
 
-	if (argc != 11) {
-		string model = "models\\";
-		string A = "demo\\content.png";
-		string BP = "demo\\style.png";
-		string output = "demo\\output\\";
+	if (argc!=9) {
+
+		string model = "models/";
+	
+		string A = "demo/content.png";
+		string BP = "demo/style.png";
+		string output = "demo/output/";
 
 		dp.SetModel(model);
 		dp.SetA(A);
@@ -17,12 +19,12 @@ int main(int argc, char** argv) {
 		dp.SetGPU(0);
 		dp.SetRatio(0.5);
 		dp.SetBlendWeight(2);
-		dp.SetId(1, 1);
 		dp.UsePhotoTransfer(false);
 		dp.LoadInputs();
 		dp.ComputeAnn();
+		
 	}
-	else {
+	else{
 		dp.SetModel(argv[1]);
 		dp.SetA(argv[2]);
 		dp.SetBPrime(argv[3]);
@@ -30,11 +32,10 @@ int main(int argc, char** argv) {
 		dp.SetGPU(atoi(argv[5]));
 		dp.SetRatio(atof(argv[6]));
 		dp.SetBlendWeight(atoi(argv[7]));
-		dp.SetId(atoi(argv[8]), atoi(argv[9]));
-		if (atoi(argv[10]) == 1) {
+		if (atoi(argv[8]) == 1) {
 			dp.UsePhotoTransfer(true);
 		}
-		else {
+		else{
 			dp.UsePhotoTransfer(false);
 		}
 		dp.LoadInputs();

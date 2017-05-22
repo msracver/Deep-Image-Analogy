@@ -18,7 +18,7 @@ The major contributors of this repository include [Jing Liao](https://liaojing.g
 
 This is an official C++ combined with CUDA implementation of [Deep Image Analogy](https://arxiv.org/abs/1705.01088). It is worth noticing that:
 - Our codes are based on [Caffe](https://github.com/Microsoft/caffe).
-- Our codes only have been tested on Windows 10 and Windows Server with CUDA 8 or 7.5.
+- Our codes only have been tested on Windows 10 and Windows Server 2012 R2 with CUDA 8 or 7.5.
 - Our codes only have been tested on several Nvidia GPU: Titan X, Titan Z, K40, GTX770.
 - The size of input image is limited, mostly should not be large than 700x500 if you use 1.0 for parameter **ratio**.
 

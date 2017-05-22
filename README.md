@@ -1,90 +1,153 @@
-This branch of Caffe extends [BVLC-led Caffe](https://github.com/BVLC/caffe) by adding Windows support and other functionalities commonly used by Microsoft's researchers, such as managed-code wrapper, [Faster-RCNN](https://papers.nips.cc/paper/5638-faster-r-cnn-towards-real-time-object-detection-with-region-proposal-networks.pdf), [R-FCN](https://arxiv.org/pdf/1605.06409v2.pdf), etc.
 
-**Update**: this branch is not actively maintained. Please checkout [this](https://github.com/BVLC/caffe/tree/windows) for more active Windows support.
 
----
+# Deep Image Analogy
 
-# Caffe
+![image](https://github.com/rozentill/DeepImageAnalogy-readme/blob/master/example/readme/teaser.png)
 
-|  **`Linux (CPU)`**   |  **`Windows (CPU)`** |
-|-------------------|----------------------|
-| [![Travis Build Status](https://api.travis-ci.org/Microsoft/caffe.svg?branch=master)](https://travis-ci.org/Microsoft/caffe) | [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/6x4l911frv07lj1w/branch/master?svg=true)](https://ci.appveyor.com/project/zer0n/caffe) |              
 
-[![License](https://img.shields.io/badge/license-BSD-blue.svg)](LICENSE)
+This is the source code written by Jing Liao and Yuan Yao of the paper :
 
-Caffe is a deep learning framework made with expression, speed, and modularity in mind.
-It is developed by the Berkeley Vision and Learning Center ([BVLC](http://bvlc.eecs.berkeley.edu)) and community contributors.
 
-Check out the [project site](http://caffe.berkeleyvision.org) for all the details like
+[Visual Attribute Transfer through Deep Image Analogy](https://arxiv.org/abs/1705.01088)
 
-- [DIY Deep Learning for Vision with Caffe](https://docs.google.com/presentation/d/1UeKXVgRvvxg9OUdh_UiC5G71UMscNPlvArsWER41PsU/edit#slide=id.p)
-- [Tutorial Documentation](http://caffe.berkeleyvision.org/tutorial/)
-- [BVLC reference models](http://caffe.berkeleyvision.org/model_zoo.html) and the [community model zoo](https://github.com/BVLC/caffe/wiki/Model-Zoo)
-- [Installation instructions](http://caffe.berkeleyvision.org/installation.html)
+[Jing Liao](https://liaojing.github.io/html/index.html), [Yuan Yao](http://yuanyao.info/), [Lu Yuan](http://www.lyuan.org/), [Gang Hua](http://www.ganghua.org/), [Sing Bing Kang](http://www.singbingkang.com/publications/)
 
-and step-by-step examples.
+Microsoft Research & Shanghai Jiao Tong University
 
-## Windows Setup
-**Requirements**: Visual Studio 2013
+SIGGRAPH 2017
 
-### Pre-Build Steps
-Copy `.\windows\CommonSettings.props.example` to `.\windows\CommonSettings.props`
 
-By defaults Windows build requires `CUDA` and `cuDNN` libraries.
-Both can be disabled by adjusting build variables in `.\windows\CommonSettings.props`.
-Python support is disabled by default, but can be enabled via `.\windows\CommonSettings.props` as well.
-3rd party dependencies required by Caffe are automatically resolved via NuGet.
 
-### CUDA
-Download `CUDA Toolkit 7.5` [from nVidia website](https://developer.nvidia.com/cuda-toolkit).
-If you don't have CUDA installed, you can experiment with CPU_ONLY build.
-In `.\windows\CommonSettings.props` set `CpuOnlyBuild` to `true` and set `UseCuDNN` to `false`.
 
-### cuDNN
-Download `cuDNN v4` or `cuDNN v5` [from nVidia website](https://developer.nvidia.com/cudnn).
-Unpack downloaded zip to %CUDA_PATH% (environment variable set by CUDA installer).
-Alternatively, you can unpack zip to any location and set `CuDnnPath` to point to this location in `.\windows\CommonSettings.props`.
-`CuDnnPath` defined in `.\windows\CommonSettings.props`.
-Also, you can disable cuDNN by setting `UseCuDNN` to `false` in the property file.
+## 1 Application
 
-### Python
-To build Caffe Python wrapper set `PythonSupport` to `true` in `.\windows\CommonSettings.props`.
-Download Miniconda 2.7 64-bit Windows installer [from Miniconda website] (http://conda.pydata.org/miniconda.html).
-Install for all users and add Python to PATH (through installer).
 
-Run the following commands from elevated command prompt:
+
+### 1.1 Photo to Style
+
+One major application of our code is to transfer the style from a painting to a photo.
+<div>
+<img src="https://github.com/rozentill/DeepImageAnalogy/blob/master/windows/deep_image_analogy/example/readme/p2sface.gif"/>
+</div>
+
+### 1.2 Style to Style
+
+It can also swap the styles between two artworks.
+
+![image](https://github.com/rozentill/DeepImageAnalogy/blob/master/windows/deep_image_analogy/example/readme/s2s.png)
+
+### 1.3 Style to Photo
+
+The most challenging application is converting a sketch or a painting to a photo.
+
+<img src = "https://github.com/rozentill/DeepImageAnalogy/blob/master/windows/deep_image_analogy/example/readme/s2p3.png">
+
+<img src = "https://github.com/rozentill/DeepImageAnalogy/blob/master/windows/deep_image_analogy/example/readme/s2p4.png">
+
+### 1.4 Photo to Photo
+
+It can do color transfer between two photos, such as generating time lapse.
+
+![image](https://github.com/rozentill/DeepImageAnalogy/blob/master/windows/deep_image_analogy/example/readme/p2p.png)
+
+## 2 Getting Started
+
+
+
+### 2.1 Prerequisite
+
+- Windows
+- CUDA 8 or 7.5
+- Visual Studio 2013
+- cuDNN
+
+### 2.2 Build
+
+#### 2.2.1 Build Caffe
+
+Our project is based on [Caffe](http://caffe.berkeleyvision.org/), so you need to build Caffe at first. Just follow the tutorial [here](https://github.com/Microsoft/caffe).
+
+#### 2.2.2 Build DeepImageAnalogy
+
+- Edit ```deep_image_analogy.vcxproj``` under ```windows/deep_image_analogy``` to make the CUDA version in it match yours .
+- Open solution ```Caffe``` and add ```deep_image_analogy``` project.
+- Build project ```deep_image_analogy```.
+
+### 2.3 Download models
+
+You need to download models VGG-19 model before start to run a demo. Go to ```windows/deep_image_analogy/models/vgg19/``` folder and download:
+- http://www.robots.ox.ac.uk/~vgg/software/very_deep/caffe/VGG_ILSVRC_19_layers.caffemodel
+
+
+### 2.4 Demo
+
+Open ```main.cpp``` in ```windows/deep_image_analogy/source/``` to see how to run a demo. You need to set several parameters which have been mentioned in the paper. To be more specific, you need to set
+
+- ***path_model***, where the VGG-19 model is.
+- ***path_A***, the input image A.
+- ***path_BP***, the input image BP.
+- ***path_output***, the output path.
+- ***GPU Number***, GPU ID you want to run this experiment.
+- ***Ratio***, the ratio to resize the inputs before sending them into the network.
+- ***Blend Weight***, the level of weights in blending process.
+- ***Output Ids***, IDs to name output files, mostly are the IDs of input A and input BP.
+- ***Flag of WLS Filter***, if you are trying to do photo style transfer, we recommend to switch this on to keep the structure of original photo.
+
+### 2.5 Direct Run
+
+We also provide a pre-built executable file in folder ```windows/deep_image_analogy/exe/```, don't hesitate to try it.
+
+To run this ```deep_image_analogy.exe```, you need to write a command line as:
 
 ```
-conda install --yes numpy scipy matplotlib scikit-image pip
-pip install protobuf
+deep_image_analogy.exe ../models/ ../demo/content.png ../demo/style.png ../demo/output/ 0 0.5 2 1 1 0
 ```
 
-#### Remark
-After you have built solution with Python support, in order to use it you have to either:  
-* set `PythonPath` environment variable to point to `<caffe_root>\Build\x64\Release\pycaffe`, or
-* copy folder `<caffe_root>\Build\x64\Release\pycaffe\caffe` under `<python_root>\lib\site-packages`.
+which means
+- ***path_model***=```../models/```
+- ***path_A***=```../demo/content.png```
+- ***path_BP***=```../demo/style.png```
+- ***path_output***=```../demo/output/```
+- ***GPU Number***=```0```
+- ***Ratio***=```0.5```
+- ***Blend Weight***=```2```
+- ***Output Ids***=```1 1```
+- ***Flag of WLS Filter***=```false```(```1``` means ```true```)
 
-### Matlab
-To build Caffe Matlab wrapper set `MatlabSupport` to `true` and `MatlabDir` to the root of your Matlab installation in `.\windows\CommonSettings.props`.
+### 2.6 Tips
 
-#### Remark
-After you have built solution with Matlab support, in order to use it you have to:
-* add the generated `matcaffe` folder to Matlab search path, and
-* add `<caffe_root>\Build\x64\Release` to your system path.
+- We often test images of size 600x400 and 448x448.
+- For the sizes above, we set ratio to be 0.5 when the structure of the image is simple, such as face. And set ratio to be 1.0 on complicated examples like mountain, ship and garden.
+- Blend weight controls the result appearance. If you want the result to be more like original content photo, please increase it; if you want the result more faithful to the style, please reduce it.
+- For the four applications, our settings are mostly (but not definitely):
+  - Photo2style: blend weight level-3, ratio-0.5 for face and ratio-1 for other cases.
+  - Style2style: blend weight level-3, ratio-1.
+  - Style2photo: blend weight level-2, ratio-0.5.
+  - Photo2photo: blend weight level-3, ratio-1.
 
-### Build
-Now, you should be able to build `.\windows\Caffe.sln`
 
-## License and Citation
+## 3. Citation
 
-Caffe is released under the [BSD 2-Clause license](https://github.com/BVLC/caffe/blob/master/LICENSE).
-The BVLC reference models are released for unrestricted use.
+```
+  @article{liao2017visual,
+    title={Visual Attribute Transfer through Deep Image Analogy},
+    author={Liao, Jing and Yao, Yuan and Yuan, Lu and Hua, Gang and Kang, Sing Bing},
+    journal={arXiv preprint arXiv:1705.01088},
+    year={2017}
+  }
+```
+## 4. Disclaimer
 
-Please cite Caffe in your publications if it helps your research:
+You should be careful that:
+- Our codes only have been tested on windows with CUDA 8 or 7.5.
+- Our codes only have been tested on several Nvidia GPU: Titan X, Titan Z, K40, GTX770.
+- The size of input image is limited, mostly should not be large than 700x500 if you use 1.0 for parameter ***ratio***.
 
-    @article{jia2014caffe,
-      Author = {Jia, Yangqing and Shelhamer, Evan and Donahue, Jeff and Karayev, Sergey and Long, Jonathan and Girshick, Ross and Guadarrama, Sergio and Darrell, Trevor},
-      Journal = {arXiv preprint arXiv:1408.5093},
-      Title = {Caffe: Convolutional Architecture for Fast Feature Embedding},
-      Year = {2014}
-    }
+## 5. License
+
+
+© Microsoft, 2017. Licensed under an Apache-2.0 license.
+
+## 6. Acknowledgments
+
+Our codes acknowledge [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page), [PatchMatch](http://gfx.cs.princeton.edu/gfx/pubs/Barnes_2009_PAR/index.php), [lbfgs](https://github.com/jwetzl/CudaLBFGS) and [Caffe](https://github.com/BVLC/caffe). We also acknowledge to the authors of our image and style examples but we do not own the copyrights of them.

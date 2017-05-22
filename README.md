@@ -23,7 +23,7 @@ SIGGRAPH 2017
 ## Disclaimer
 
 This is an official C++ combined with CUDA implementation of [Deep Image Analogy](https://arxiv.org/abs/1705.01088). It is worth noticing that:
-- Our codes are based on Microsoft version Caffe.
+- Our codes are based on Microsoft version [Caffe](https://github.com/Microsoft/caffe).
 - Our codes only have been tested on Windows 10 and Windows Server with CUDA 8 or 7.5.
 - Our codes only have been tested on several Nvidia GPU: Titan X, Titan Z, K40, GTX770.
 - The size of input image is limited, mostly should not be large than 700x500 if you use 1.0 for parameter **ratio**.
@@ -86,7 +86,7 @@ It can do color transfer between two photos, such as generating time lapse.
 
 
 
-- Build Caffe at first. Just follow the tutorial [here](https://github.com/Microsoft/caffe).
+- Build [Caffe](http://caffe.berkeleyvision.org/) at first. Just follow the tutorial [here](https://github.com/Microsoft/caffe).
 - Edit ```deep_image_analogy.vcxproj``` under ```windows/deep_image_analogy``` to make the CUDA version in it match yours .
 - Open solution ```Caffe``` and add ```deep_image_analogy``` project.
 - Build project ```deep_image_analogy```.

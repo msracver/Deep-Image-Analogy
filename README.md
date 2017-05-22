@@ -2,28 +2,22 @@
 
 # Deep Image Analogy
 
-The major contributors of this repository include [Jing Liao](https://liaojing.github.io/html/index.html) and [Yuan Yao](http://yuanyao.info/).
+The major contributors of this repository include [Jing Liao](https://liaojing.github.io/html/index.html), [Yuan Yao](http://yuanyao.info/), [Lu Yuan](http://www.lyuan.org/), [Gang Hua](http://www.ganghua.org/), [Sing Bing Kang](http://www.singbingkang.com/publications/) @ Microsoft Research.
 
 ## Introduction
 
-**Deep Image Analogy** is initially described in the paper :
+**Deep Image Analogy** is a technique to find semantically-meaningful dense correspondences between two input images. It adapts the notion of image analogy with features extracted from a Deep Convolutional Neural Network.
 
-[Visual Attribute Transfer through Deep Image Analogy](https://arxiv.org/abs/1705.01088)
+**Deep Image Analogy** is initially described in a [SIGGRAPH 2017 paper](https://arxiv.org/abs/1705.01088)
 
-[Jing Liao](https://liaojing.github.io/html/index.html), [Yuan Yao](http://yuanyao.info/), [Lu Yuan](http://www.lyuan.org/), [Gang Hua](http://www.ganghua.org/), [Sing Bing Kang](http://www.singbingkang.com/publications/)
-
-Microsoft Research & Shanghai Jiao Tong University
-
-SIGGRAPH 2017
 
 ![image](https://github.com/msracver/Deep-Image-Analogy/blob/master/windows/deep_image_analogy/example/readme/teaser.png)
-
 
 
 ## Disclaimer
 
 This is an official C++ combined with CUDA implementation of [Deep Image Analogy](https://arxiv.org/abs/1705.01088). It is worth noticing that:
-- Our codes are based on Microsoft version [Caffe](https://github.com/Microsoft/caffe).
+- Our codes are based on [Caffe](https://github.com/Microsoft/caffe).
 - Our codes only have been tested on Windows 10 and Windows Server with CUDA 8 or 7.5.
 - Our codes only have been tested on several Nvidia GPU: Titan X, Titan Z, K40, GTX770.
 - The size of input image is limited, mostly should not be large than 700x500 if you use 1.0 for parameter **ratio**.
@@ -34,7 +28,7 @@ This is an official C++ combined with CUDA implementation of [Deep Image Analogy
 © Microsoft, 2017. Licensed under an  BSD 2-Clause license.
 
 ## Citation
-
+If you find **Deep Image Analogy** (include deep patchmatch) helpful for your research, please consider citing:
 ```
   @article{liao2017visual,
     title={Visual Attribute Transfer through Deep Image Analogy},
@@ -77,14 +71,12 @@ It can do color transfer between two photos, such as generating time lapse.
 
 ### Prerequisite
 
-- Windows
+- Windows 7/8/10
 - CUDA 8 or 7.5
 - Visual Studio 2013
 - cuDNN
 
 ### Build
-
-
 
 - Build [Caffe](http://caffe.berkeleyvision.org/) at first. Just follow the tutorial [here](https://github.com/Microsoft/caffe).
 - Edit ```deep_image_analogy.vcxproj``` under ```windows/deep_image_analogy``` to make the CUDA version in it match yours .
@@ -107,7 +99,6 @@ Open ```main.cpp``` in ```windows/deep_image_analogy/source/``` to see how to ru
 - **GPU Number**, GPU ID you want to run this experiment.
 - **Ratio**, the ratio to resize the inputs before sending them into the network.
 - **Blend Weight**, the level of weights in blending process.
-- **Output Ids**, IDs to name output files, mostly are the IDs of input A and input BP.
 - **Flag of WLS Filter**, if you are trying to do photo style transfer, we recommend to switch this on to keep the structure of original photo.
 
 ### Direct Run
@@ -117,7 +108,7 @@ We also provide a pre-built executable file in folder ```windows/deep_image_anal
 To run this ```deep_image_analogy.exe```, you need to write a command line as:
 
 ```
-deep_image_analogy.exe ../models/ ../demo/content.png ../demo/style.png ../demo/output/ 0 0.5 2 1 1 0
+deep_image_analogy.exe ../models/ ../demo/content.png ../demo/style.png ../demo/output/ 0 0.5 2 0
 ```
 
 which means
@@ -128,19 +119,18 @@ which means
 - **GPU Number**=```0```
 - **Ratio**=```0.5```
 - **Blend Weight**=```2```
-- **Output Ids**=```1 1```
 - **Flag of WLS Filter**=```false```(```1``` means ```true```)
 
 ### Tips
 
 - We often test images of size 600x400 and 448x448.
-- For the sizes above, we set ratio to be 0.5 when the structure of the image is simple, such as face. And set ratio to be 1.0 on complicated examples like mountain, ship and garden.
+- For the sizes above, we found ratio=0.5 can make the results better in face cases. For other complicated examples like mountain, ship and garden, we set ratio to 1.0.
 - Blend weight controls the result appearance. If you want the result to be more like original content photo, please increase it; if you want the result more faithful to the style, please reduce it.
 - For the four applications, our settings are mostly (but not definitely):
-  - Photo2style: blend weight level-3, ratio-0.5 for face and ratio-1 for other cases.
-  - Style2style: blend weight level-3, ratio-1.
-  - Style2photo: blend weight level-2, ratio-0.5.
-  - Photo2photo: blend weight level-3, ratio-1.
+  - Photo2style: blend weight=3, ratio=0.5 for face and ratio=1 for other cases.
+  - Style2style: blend weight=3, ratio=1.
+  - Style2photo: blend weight=2, ratio=0.5.
+  - Photo2photo: blend weight=3, ratio=1.
 
 ## Acknowledgments
 

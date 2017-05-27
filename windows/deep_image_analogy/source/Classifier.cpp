@@ -93,36 +93,6 @@ void Classifier::Predict(const cv::Mat& img, std::vector<std::string>& layers, s
 
 }
 
-void Classifier::Draw(float* data, Dim dim,string filename)
-{
-	//visualization
-	int cols, rows;
-	
-	int channel = dim.channel;
-	int height = dim.height;
-	int width = dim.width;
-	Factorization(channel, cols, rows);
-
-	float* ptr=(float*)malloc(dim.channel*dim.width*dim.height*sizeof(float));
-	cudaMemcpy(ptr, data, dim.channel*dim.width*dim.height*sizeof(float), cudaMemcpyDeviceToHost);
-
-	cv::Mat img(height*rows + rows - 1, width*cols + cols - 1, CV_8UC1, cv::Scalar(255));
-
-	for (int r = 0; r < rows; r++)
-	for (int c = 0; c <cols; c++)
-	{
-		const float* begin = ptr + (r*cols + c)*height*width;
-		const float* end = begin + height*width;
-
-		Square_draw(std::vector<float>(begin, end), img(cv::Rect(c*(width + 1), r*(height + 1), width, height)));
-
-	}
-
-
-	cv::imwrite(filename, img);
-	free(ptr);
-}
-
 /* Wrap the input layer of the network in separate cv::Mat objects
 
 * (one per channel). This way we save one memcpy operation and we

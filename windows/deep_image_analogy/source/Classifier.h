@@ -57,8 +57,6 @@ public:
 
 	void Predict(const cv::Mat& img, std::vector<std::string>& layers, std::vector<float *>& data_s, std::vector<float *>& data_d, std::vector<Dim>& size);
 
-	void Draw(float* data, Dim dim, string filename);
-
 	void DeleteNet() { delete net_; }
 
 private:

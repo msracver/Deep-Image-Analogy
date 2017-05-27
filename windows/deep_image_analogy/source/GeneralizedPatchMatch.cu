@@ -1,6 +1,6 @@
 ﻿
 
-#include "GeneralizedPatchmatch.cuh"
+#include "GeneralizedPatchMatch.cuh"
 #include "curand_kernel.h"
 
 __host__ __device__ int clamp(int x, int x_max, int x_min) {//assume x_max >= x_min

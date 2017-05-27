@@ -66,5 +66,32 @@ protected:
 };
 
 
+// CPU based cost functions can inherit from this class
+// and implement cpu_f_gradf(), the results will be 
+// written back to GPU memory automatically.
+class LBFGS_API cpu_cost_function: public cost_function
+{
+public:
+	cpu_cost_function(size_t numDimensions) : cost_function(numDimensions)
+	{
+		m_h_x     = new float[numDimensions];
+		m_h_gradf = new float[numDimensions];
+	}
+
+	virtual ~cpu_cost_function()
+	{
+		delete [] m_h_x;
+		delete [] m_h_gradf;
+	}
+
+	virtual void cpu_f_gradf(const floatdouble *h_x, floatdouble *h_f, floatdouble *h_gradf) = 0;
+
+	void f_gradf(const float *d_x, float *d_f, float *d_gradf);
+
+private:
+	float *m_h_x;
+	float *m_h_gradf;
+};
+
 
 #endif /* end of include guard: COST_FUNCTION_H */

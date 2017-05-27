@@ -1,6 +1,6 @@
 #include "caffe/util/math_functions.hpp"
 #include "caffe/common.hpp"
-#include "GeneralizedPatchmatch.cuh"
+#include "GeneralizedPatchMatch.cuh"
 #include "DeepAnalogy.cuh"
 #include "WLS.h"
 #include "Deconv.h"

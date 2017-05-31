@@ -18,7 +18,7 @@ The major contributors of this repository include [Jing Liao](https://liaojing.g
 
 This is an official C++ combined with CUDA implementation of [Deep Image Analogy](https://arxiv.org/abs/1705.01088). It is worth noticing that:
 - Our codes are based on [Caffe](https://github.com/Microsoft/caffe).
-- Our codes only have been tested on Windows 10 and Windows Server 2012 R2 with CUDA 8 or 7.5.
+- Our codes only have been tested on Windows 10, Windows Server 2012 R2 and Ubuntu with CUDA 8 or 7.5.
 - Our codes only have been tested on several Nvidia GPU: Titan X, Titan Z, K40, GTX770.
 - The size of input image is limited, mostly should not be large than 700x500 if you use 1.0 for parameter **ratio**.
 
@@ -72,26 +72,21 @@ It can do color transfer between two photos, such as generating time lapse.
 
 ### Prerequisite
 
-- Windows 7/8/10
+- Linux or Mac OS X
 - CUDA 8 or 7.5
-- Visual Studio 2013
-- cuDNN
 
-### Build
+### Configure & Build
 
-- Build [Caffe](http://caffe.berkeleyvision.org/) at first. Just follow the tutorial [here](https://github.com/Microsoft/caffe).
-- Edit ```deep_image_analogy.vcxproj``` under ```windows/deep_image_analogy``` to make the CUDA version in it match yours .
-- Open solution ```Caffe``` and add ```deep_image_analogy``` project.
-- Build project ```deep_image_analogy```.
-
-### Download models
-
-You need to download models VGG-19 model before start to run a demo. Go to ```windows/deep_image_analogy/models/vgg19/``` folder and download:
-- http://www.robots.ox.ac.uk/~vgg/software/very_deep/caffe/VGG_ILSVRC_19_layers.caffemodel
+- Configuration for building Caffe. Just follow t he tutorial from [Caffe](http://caffe.berkeleyvision.org/).
+- Use configuration script by typing ```sh scripts/config_deep_image_analogy.sh``` under root folder.
+- Modify the CUDA path in ```Makefile.config.example``` and rename it to ```Makefile.config```.
+- Compile Caffe, make sure you installed all the dependencies. Just type ```make all```.
+- Add libraries built by Caffe into ```LD_LIBRARY_PATH``` by ```export LD_LIBRARY_PATH="./build/lib"```.
+- Compile deep_image_analogy by ```sh scripts/make_deep_image_analogy.sh```.
 
 ### Demo
 
-Open ```main.cpp``` in ```windows/deep_image_analogy/source/``` to see how to run a demo. You need to set several parameters which have been mentioned in the paper. To be more specific, you need to set
+Open ```main.cpp``` in ```examples/deep_image_analogy/source/``` to see how to run a demo. You need to set several parameters which have been mentioned in the paper. To be more specific, you need to set
 
 - **path_model**, where the VGG-19 model is.
 - **path_A**, the input image A.
@@ -102,25 +97,10 @@ Open ```main.cpp``` in ```windows/deep_image_analogy/source/``` to see how to ru
 - **Blend Weight**, the level of weights in blending process.
 - **Flag of WLS Filter**, if you are trying to do photo style transfer, we recommend to switch this on to keep the structure of original photo.
 
-### Direct Run
-
-We also provide a pre-built executable file in folder ```windows/deep_image_analogy/exe/```, don't hesitate to try it.
-
-To run this ```deep_image_analogy.exe```, you need to write a command line as:
-
+To run the demo, just type:
 ```
-deep_image_analogy.exe ../models/ ../demo/content.png ../demo/style.png ../demo/output/ 0 0.5 2 0
+./deep_image_analogy examples/deep_image_analogy/models/ examples/deep_image_analogy/demo/content.png examples/deep_image_analogy/demo/style.png examples/deep_image_analogy/demo/output/ 0 0.5 2 0
 ```
-
-which means
-- **path_model**=```../models/```
-- **path_A**=```../demo/content.png```
-- **path_BP**=```../demo/style.png```
-- **path_output**=```../demo/output/```
-- **GPU Number**=```0```
-- **Ratio**=```0.5```
-- **Blend Weight**=```2```
-- **Flag of WLS Filter**=```0```( ```0```: WLS filter disabled, ```1```: WLS filter enabled, only required for the case of photo to photo)
 
 ### Tips
 

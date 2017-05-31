@@ -77,10 +77,10 @@ It can do color transfer between two photos, such as generating time lapse.
 
 ### Configure & Build
 
-- Configuration for building Caffe. Just follow the tutorial from [Caffe](http://caffe.berkeleyvision.org/).
-- Use configuration script by typing ```sh scripts/config_deep_image_analogy.sh``` under root folder.
+- Install dependencies for building Caffe. Just follow the tutorial from [Caffe](http://caffe.berkeleyvision.org/).
+- Use configuration script by typing ```sh scripts/config_deep_image_analogy.sh```.
 - Modify the CUDA path in ```Makefile.config.example``` and rename it to ```Makefile.config```.
-- Compile Caffe, make sure you installed all the dependencies. Just type ```make all```.
+- Compile Caffe, make sure you installed all the dependencies before. Just type ```make all```.
 - Add libraries built by Caffe into ```LD_LIBRARY_PATH``` by ```export LD_LIBRARY_PATH="./build/lib"```.
 - Compile deep_image_analogy by ```sh scripts/make_deep_image_analogy.sh```.
 

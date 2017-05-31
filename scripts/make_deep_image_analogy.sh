@@ -1,8 +1,8 @@
 #!/bin/sh
 
-source=example/deep_image_analogy/source
+source=deep_image_analogy/source
 
-nvcc $source/*.cpp $source/*.cu -o deep_image_analogy \
+nvcc $source/*.cpp $source/*.cu -o demo \
 	-std=c++11 \
 	-I./include \
 	-L./build/lib \

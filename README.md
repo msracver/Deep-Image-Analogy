@@ -81,12 +81,12 @@ It can do color transfer between two photos, such as generating time lapse.
 - Use configuration script by typing ```sh scripts/config_deep_image_analogy.sh```.
 - Modify the CUDA path in ```Makefile.config.example``` and rename it to ```Makefile.config```.
 - Compile Caffe, make sure you installed all the dependencies before. Just type ```make all```.
-- Add libraries built by Caffe into ```LD_LIBRARY_PATH``` by ```export LD_LIBRARY_PATH="./build/lib"```.
 - Compile deep_image_analogy by ```sh scripts/make_deep_image_analogy.sh```.
+- Add libraries built by Caffe into ```LD_LIBRARY_PATH``` by ```export LD_LIBRARY_PATH="./build/lib"```.
 
 ### Demo
 
-Open ```main.cpp``` in ```examples/deep_image_analogy/source/``` to see how to run a demo. You need to set several parameters which have been mentioned in the paper. To be more specific, you need to set
+Open ```main.cpp``` in ```deep_image_analogy/source/``` to see how to run a demo. You need to set several parameters which have been mentioned in the paper. To be more specific, you need to set
 
 - **path_model**, where the VGG-19 model is.
 - **path_A**, the input image A.
@@ -99,7 +99,7 @@ Open ```main.cpp``` in ```examples/deep_image_analogy/source/``` to see how to r
 
 To run the demo, just type:
 ```
-./deep_image_analogy examples/deep_image_analogy/models/ examples/deep_image_analogy/demo/content.png examples/deep_image_analogy/demo/style.png examples/deep_image_analogy/demo/output/ 0 0.5 2 0
+./demo deep_image_analogy/models/ deep_image_analogy/demo/content.png deep_image_analogy/demo/style.png deep_image_analogy/demo/output/ 0 0.5 2 0
 ```
 
 ### Tips

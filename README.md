@@ -75,7 +75,6 @@ It can do color transfer between two photos, such as generating time lapse.
 - Windows 7/8/10 (for linux or mac os x user, please check branch [linux](https://github.com/msracver/Deep-Image-Analogy/tree/linux).)
 - CUDA 8 or 7.5
 - Visual Studio 2013
-- cuDNN
 
 ### Build
 

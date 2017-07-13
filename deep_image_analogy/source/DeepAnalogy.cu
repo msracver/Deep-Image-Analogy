@@ -51,7 +51,7 @@ __host__ void norm(float* &dst, float* src, float* smooth, Dim dim){
 	}
 
 
-	//norm	
+	//norm
 	caffe_gpu_gemm(CblasNoTrans, CblasNoTrans, dim.channel, dim.width*dim.height, 1, 1.0f, ones, dis, 0.0f, x2);
 	caffe_gpu_div(count, src, x2, dst);
 
@@ -205,7 +205,7 @@ void DeepAnalogy::LoadInputs(){
 		return;
 	}
 
-	
+
 	cur_A_cols = ori_AL.cols;
 	cur_A_rows = ori_AL.rows;
 	cur_BP_cols = ori_BPL.cols;
@@ -298,7 +298,7 @@ void DeepAnalogy::ComputeAnn() {
 	sizes.push_back(3);
 
 	params.iter = 10;
-	
+
 	//scale and enhance
     float ratio = resizeRatio;
 	Mat img_BP, img_A;
@@ -326,17 +326,17 @@ void DeepAnalogy::ComputeAnn() {
 	::google::InitGoogleLogging("deepanalogy");
 	string model_file = "vgg19/VGG_ILSVRC_19_layers_deploy.prototxt";
 	string trained_file = "vgg19/VGG_ILSVRC_19_layers.caffemodel";
-	
+
 	Classifier classifier_A(path_model + model_file, path_model + trained_file);
 	Classifier classifier_B(path_model + model_file, path_model + trained_file);
 
 
-	std::vector<float *> data_A, data_A1;
+	std::vector<float *> data_A, data_AP;
 	data_A.resize(params.layers.size());
-	data_A1.resize(params.layers.size());
+	data_AP.resize(params.layers.size());
 	std::vector<Dim> data_A_size;
 	data_A_size.resize(params.layers.size());
-	classifier_A.Predict(img_A, params.layers, data_A1, data_A, data_A_size);
+	classifier_A.Predict(img_A, params.layers, data_AP, data_A, data_A_size);
 
 	std::vector<float *> data_B, data_BP;
 	data_B.resize(params.layers.size());
@@ -371,7 +371,7 @@ void DeepAnalogy::ComputeAnn() {
 	for (int curr_layer = 0; curr_layer < numlayer - 1; curr_layer++)//from 32 to 512
 	{
 
-		//set parameters			
+		//set parameters
 		params_host[0] = data_A_size[curr_layer].channel;//channels
 		params_host[1] = data_A_size[curr_layer].height;
 		params_host[2] = data_A_size[curr_layer].width;
@@ -380,21 +380,21 @@ void DeepAnalogy::ComputeAnn() {
 		params_host[5] = sizes[curr_layer];
 		params_host[6] = params.iter;
 		params_host[7] = range[curr_layer];
-		
+
 		//copy to device
 		cudaMemcpy(params_device_AB, params_host, param_size * sizeof(int), cudaMemcpyHostToDevice);
 
-		//set parameters			
+		//set parameters
 		params_host[0] = data_B_size[curr_layer].channel;//channels
 		params_host[1] = data_B_size[curr_layer].height;
 		params_host[2] = data_B_size[curr_layer].width;
 		params_host[3] = data_A_size[curr_layer].height;
 		params_host[4] = data_A_size[curr_layer].width;
-	
+
 		//copy to device
 		cudaMemcpy(params_device_BA, params_host, param_size * sizeof(int), cudaMemcpyHostToDevice);
 
-		////set device pa, device pb, device ann and device annd		
+		////set device pa, device pb, device ann and device annd
 		dim3 blocksPerGridAB(data_A_size[curr_layer].width / 20 + 1, data_A_size[curr_layer].height / 20 + 1, 1);
 		dim3 threadsPerBlockAB(20, 20, 1);
 		ann_size_AB = data_A_size[curr_layer].width* data_A_size[curr_layer].height;
@@ -428,17 +428,17 @@ void DeepAnalogy::ComputeAnn() {
 		}
 
 		//normarlize two data
-		float *Ndata_A, *Ndata_A1, *Ndata_B, *Ndata_BP;
+		float *Ndata_A, *Ndata_AP, *Ndata_B, *Ndata_BP;
 		float *response_A, *response_BP;
 
 		cudaMalloc(&Ndata_A, data_A_size[curr_layer].channel*data_A_size[curr_layer].width*data_A_size[curr_layer].height*sizeof(float));
-		cudaMalloc(&Ndata_A1, data_A_size[curr_layer].channel*data_A_size[curr_layer].width*data_A_size[curr_layer].height*sizeof(float));
+		cudaMalloc(&Ndata_AP, data_A_size[curr_layer].channel*data_A_size[curr_layer].width*data_A_size[curr_layer].height*sizeof(float));
 		cudaMalloc(&response_A, data_A_size[curr_layer].width*data_A_size[curr_layer].height*sizeof(float));
 		cudaMalloc(&Ndata_B, data_B_size[curr_layer].channel*data_B_size[curr_layer].width*data_B_size[curr_layer].height*sizeof(float));
 		cudaMalloc(&Ndata_BP, data_B_size[curr_layer].channel*data_B_size[curr_layer].width*data_B_size[curr_layer].height*sizeof(float));
 		cudaMalloc(&response_BP, data_B_size[curr_layer].width*data_B_size[curr_layer].height*sizeof(float));
 
-		
+
 		norm(Ndata_A, data_A[curr_layer], response_A, data_A_size[curr_layer]);
 		norm(Ndata_BP, data_BP[curr_layer], response_BP, data_B_size[curr_layer]);
 
@@ -458,19 +458,19 @@ void DeepAnalogy::ComputeAnn() {
 		response1.convertTo(response_byte1, CV_8UC1, 255);
 		response2.convertTo(response_byte2, CV_8UC1, 255);
 
-		blend << <blocksPerGridAB, threadsPerBlockAB >> >(response_A, data_A[curr_layer], data_A1[curr_layer], weight[curr_layer], params_device_AB);
+		blend << <blocksPerGridAB, threadsPerBlockAB >> >(response_A, data_A[curr_layer], data_AP[curr_layer], weight[curr_layer], params_device_AB);
 		blend << <blocksPerGridBA, threadsPerBlockBA >> >(response_BP, data_BP[curr_layer], data_B[curr_layer], weight[curr_layer], params_device_BA);
 
-		norm(Ndata_A1, data_A1[curr_layer], NULL, data_A_size[curr_layer]);
+		norm(Ndata_AP, data_AP[curr_layer], NULL, data_A_size[curr_layer]);
 		norm(Ndata_B, data_B[curr_layer], NULL, data_B_size[curr_layer]);
 
-		//patchmatch	
+		//patchmatch
 		cout << "Finding nearest neighbor field using PatchMatch Algorithm at layer:" << params.layers[curr_layer] << ".\n";
-		patchmatch << <blocksPerGridAB, threadsPerBlockAB >> >(Ndata_A1, Ndata_BP, Ndata_A, Ndata_B, ann_device_AB, annd_device_AB, params_device_AB);
-		patchmatch << <blocksPerGridBA, threadsPerBlockBA >> >(Ndata_B, Ndata_A, Ndata_BP, Ndata_A1, ann_device_BA, annd_device_BA, params_device_BA);
+		patchmatch << <blocksPerGridAB, threadsPerBlockAB >> >(Ndata_AP, Ndata_BP, Ndata_A, Ndata_B, ann_device_AB, annd_device_AB, params_device_AB);
+		patchmatch << <blocksPerGridBA, threadsPerBlockBA >> >(Ndata_B, Ndata_A, Ndata_BP, Ndata_AP, ann_device_BA, annd_device_BA, params_device_BA);
 
 		cudaFree(Ndata_A);
-		cudaFree(Ndata_A1);
+		cudaFree(Ndata_AP);
 		cudaFree(Ndata_B);
 		cudaFree(Ndata_BP);
 		cudaFree(response_A);
@@ -481,7 +481,53 @@ void DeepAnalogy::ComputeAnn() {
 		{
 			int next_layer = curr_layer + 2;
 
-			//set parameters			
+			/***************upsample***********************/
+			// for better deconvolution
+			params_host[0] = data_A_size[next_layer].channel;//channels
+			params_host[1] = data_A_size[next_layer].height;
+			params_host[2] = data_A_size[next_layer].width;
+			params_host[3] = data_B_size[next_layer].height;
+			params_host[4] = data_B_size[next_layer].width;
+			params_host[5] = sizes[next_layer];
+			params_host[6] = params.iter;
+			params_host[7] = range[next_layer];
+
+			//copy to device
+			cudaMemcpy(params_device_AB, params_host, param_size * sizeof(int), cudaMemcpyHostToDevice);
+
+			//set parameters
+			params_host[0] = data_B_size[next_layer].channel;//channels
+			params_host[1] = data_B_size[next_layer].height;
+			params_host[2] = data_B_size[next_layer].width;
+			params_host[3] = data_A_size[next_layer].height;
+			params_host[4] = data_A_size[next_layer].width;
+
+			//copy to device
+			cudaMemcpy(params_device_BA, params_host, param_size * sizeof(int), cudaMemcpyHostToDevice);
+
+			////set device pa, device pb, device ann and device annd
+			dim3 blocksPerGridAB(data_A_size[next_layer].width / 20 + 1, data_A_size[next_layer].height / 20 + 1, 1);
+			dim3 threadsPerBlockAB(20, 20, 1);
+			ann_size_AB = data_A_size[next_layer].width* data_A_size[next_layer].height;
+			dim3 blocksPerGridSC(data_B_size[next_layer].width / 20 + 1, data_B_size[next_layer].height / 20 + 1, 1);
+			dim3 threadsPerBlockBA(20, 20, 1);
+			ann_size_BA = data_B_size[next_layer].width* data_B_size[next_layer].height;
+
+			unsigned int * ann_tmp;
+			cudaMalloc(&ann_tmp, ann_size_AB * sizeof(unsigned int));
+			upSample_kernel << <blocksPerGridAB, threadsPerBlockAB >> >(ann_device_AB, ann_tmp, params_device_AB,
+				data_A_size[curr_layer].width, data_A_size[curr_layer].height);//get new ann_device
+			avg_vote << <blocksPerGridAB, threadsPerBlockAB >> >(ann_tmp, data_BP[next_layer], data_AP[next_layer], params_device_AB);
+			cudaFree(ann_tmp);
+
+			cudaMalloc(&ann_tmp, ann_size_BA * sizeof(unsigned int));
+			upSample_kernel << <blocksPerGridBA, threadsPerBlockBA >> >(ann_device_BA, ann_tmp, params_device_BA,
+				data_B_size[curr_layer].width, data_B_size[curr_layer].height);//get new ann_devices
+			avg_vote << <blocksPerGridBA, threadsPerBlockBA >> >(ann_tmp, data_A[next_layer], data_B[next_layer], params_device_BA);
+			cudaFree(ann_tmp);
+			/***********************************************/
+
+			//set parameters
 			params_host[0] = data_A_size[curr_layer].channel;//channels
 			params_host[1] = data_A_size[curr_layer].height;
 			params_host[2] = data_A_size[curr_layer].width;
@@ -490,21 +536,21 @@ void DeepAnalogy::ComputeAnn() {
 			params_host[5] = sizes[curr_layer];
 			params_host[6] = params.iter;
 			params_host[7] = range[curr_layer];
-	
+
 			//copy to device
 			cudaMemcpy(params_device_AB, params_host, param_size * sizeof(int), cudaMemcpyHostToDevice);
 
-			//set parameters			
+			//set parameters
 			params_host[0] = data_B_size[curr_layer].channel;//channels
 			params_host[1] = data_B_size[curr_layer].height;
 			params_host[2] = data_B_size[curr_layer].width;
 			params_host[3] = data_A_size[curr_layer].height;
 			params_host[4] = data_A_size[curr_layer].width;
-			
+
 			//copy to device
 			cudaMemcpy(params_device_BA, params_host, param_size * sizeof(int), cudaMemcpyHostToDevice);
 
-			////set device pa, device pb, device ann and device annd		
+			////set device pa, device pb, device ann and device annd
 			blocksPerGridAB = dim3(data_A_size[curr_layer].width / 20 + 1, data_A_size[curr_layer].height / 20 + 1, 1);
 			threadsPerBlockAB = dim3(20, 20, 1);
 			ann_size_AB = data_A_size[curr_layer].width* data_A_size[curr_layer].height;
@@ -518,7 +564,7 @@ void DeepAnalogy::ComputeAnn() {
 			float *target;
 			cudaMalloc(&target, num1 * sizeof(float));
 			avg_vote << <blocksPerGridAB, threadsPerBlockAB >> >(ann_device_AB, data_BP[curr_layer], target, params_device_AB);
-			deconv(&classifier_A, params.layers[curr_layer], target, data_A_size[curr_layer], params.layers[next_layer], data_A1[next_layer], data_A_size[next_layer]);
+			deconv(&classifier_A, params.layers[curr_layer], target, data_A_size[curr_layer], params.layers[next_layer], data_AP[next_layer], data_A_size[next_layer]);
 			cudaFree(target);
 
 			num1 = data_B_size[curr_layer].channel*data_B_size[curr_layer].width*data_B_size[curr_layer].height;
@@ -536,7 +582,7 @@ void DeepAnalogy::ComputeAnn() {
 	//upsample
 	int curr_layer = numlayer - 1;
 	{
-		//set parameters			
+		//set parameters
 		params_host[0] = 3;//channels
 		params_host[1] = img_AL.rows;
 		params_host[2] = img_AL.cols;
@@ -548,7 +594,7 @@ void DeepAnalogy::ComputeAnn() {
 		//copy to device
 		cudaMemcpy(params_device_AB, params_host, param_size * sizeof(int), cudaMemcpyHostToDevice);
 
-		//set parameters			
+		//set parameters
 		params_host[0] = 3;//channels
 		params_host[1] = img_BPL.rows;
 		params_host[2] = img_BPL.cols;
@@ -557,7 +603,7 @@ void DeepAnalogy::ComputeAnn() {
 		//copy to device
 		cudaMemcpy(params_device_BA, params_host, param_size * sizeof(int), cudaMemcpyHostToDevice);
 
-		////set device pa, device pb, device ann and device annd		
+		////set device pa, device pb, device ann and device annd
 		dim3 blocksPerGridAB(img_AL.cols / 20 + 1, img_AL.rows / 20 + 1, 1);
 		dim3 threadsPerBlockAB(20, 20, 1);
 		ann_size_AB = img_AL.cols* img_AL.rows;
@@ -582,7 +628,7 @@ void DeepAnalogy::ComputeAnn() {
 
 		cudaMemcpy(ann_host_AB, ann_device_AB, ann_size_AB * sizeof(unsigned int), cudaMemcpyDeviceToHost);
 		cudaMemcpy(ann_host_BA, ann_device_BA, ann_size_BA * sizeof(unsigned int), cudaMemcpyDeviceToHost);
-		//free space in device, only need to free pa and pb which are created temporarily	
+		//free space in device, only need to free pa and pb which are created temporarily
 		//image downBAale
 		Mat flow, result_AB, result_BA, err, out, normal;
 
@@ -609,7 +655,7 @@ void DeepAnalogy::ComputeAnn() {
 			img_BPL.convertTo(origin_B, CV_32FC3, 1 / 255.0);
 			result_AB.convertTo(res_AB, CV_32FC3, 1 / 255.0);
 			result_BA.convertTo(res_BA, CV_32FC3, 1 / 255.0);
-			
+
 			WeightedLeastSquare(filtered_AB, origin_A, res_AB);
 			WeightedLeastSquare(filtered_BA, origin_B, res_BA);
 			WeightedLeastSquare(filtered_A, origin_A, origin_A);
@@ -692,4 +738,3 @@ void DeepAnalogy::ComputeAnn() {
 	classifier_A.DeleteNet();
 	classifier_B.DeleteNet();
 }
-

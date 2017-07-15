@@ -23,12 +23,12 @@ void WeightedLeastSquare(cv::Mat& resImg, const cv::Mat& img_guide, const cv::Ma
 			if (x + 1 < img_guide.cols)
 			{
 				float gx = grayImgF.at<float>(y, x + 1) - grayImgF.at<float>(y, x);
-				gradWeightX.at<float>(y, x) = lamda / (pow(abs(gx), alpha) + epsilon);
+				gradWeightX.at<float>(y, x) = lamda / (pow(fabs(gx), alpha) + epsilon);
 			}
 			if (y + 1 < img_guide.rows)
 			{
 				float gy = grayImgF.at<float>(y + 1, x) - grayImgF.at<float>(y, x);
-				gradWeightY.at<float>(y, x) = lamda / (pow(abs(gy), alpha) + epsilon);
+				gradWeightY.at<float>(y, x) = lamda / (pow(fabs(gy), alpha) + epsilon);
 			}
 		}
 	}

@@ -29,13 +29,28 @@ This is an official C++ combined with CUDA implementation of [Deep Image Analogy
 
 ## Citation
 If you find **Deep Image Analogy** (include deep patchmatch) helpful for your research, please consider citing:
+
 ```
-  @article{liao2017visual,
-    title={Visual Attribute Transfer through Deep Image Analogy},
-    author={Liao, Jing and Yao, Yuan and Yuan, Lu and Hua, Gang and Kang, Sing Bing},
-    journal={arXiv preprint arXiv:1705.01088},
-    year={2017}
-  }
+@article{Liao:2017:VAT:3072959.3073683,
+ author = {Liao, Jing and Yao, Yuan and Yuan, Lu and Hua, Gang and Kang, Sing Bing},
+ title = {Visual Attribute Transfer Through Deep Image Analogy},
+ journal = {ACM Trans. Graph.},
+ issue_date = {July 2017},
+ volume = {36},
+ number = {4},
+ month = jul,
+ year = {2017},
+ issn = {0730-0301},
+ pages = {120:1--120:15},
+ articleno = {120},
+ numpages = {15},
+ url = {http://doi.acm.org/10.1145/3072959.3073683},
+ doi = {10.1145/3072959.3073683},
+ acmid = {3073683},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {deep matching, image analogy, transfer},
+} 
 ```
 
 ## Application

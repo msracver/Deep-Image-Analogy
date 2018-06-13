@@ -25,7 +25,7 @@ This is an official C++ combined with CUDA implementation of [Deep Image Analogy
 
 ## License
 
-© Microsoft, 2017. Licensed under an  BSD 2-Clause license.
+© Microsoft, 2017. Licensed under a MIT license.
 
 ## Citation
 If you find **Deep Image Analogy** (include deep patchmatch) helpful for your research, please consider citing:
